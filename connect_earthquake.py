@@ -3,7 +3,6 @@ import random
 import sys
 
 slot = []
-NumSlot = [0, 0,  0, 0, 0, 0, 0]
 
 def check_vertical(x, y, sign):
     point = []
@@ -134,25 +133,37 @@ def terminal_test(x, y, sign):
     else:
         return False
 
+
+def print_slot():
+    for i in range(10):
+        for j in range(7):
+            sys.stdout.write("|")
+            if i <= NumSlot[j]:
+                sys.stdout.write(slot[j][i])
+            else:
+                sys.stdout.write(" ")
+
+        sys.stdout.write("|")
+        print " "
+
+
 def earthquake():
-    die = random.randint(0, 3)
+    die = random.randint(0, 6)
     if die == 1:
         print ("earthquake happens ")
-        for i in range(7):
-            for j in range(9):
-                slot[i][j] = slot[i][j + 1]
-                if NumSlot[i] <= 0:
-                    NumSlot[i] = 0
-                else:
-                    NumSlot[i] -= 1
-                """ if j == 9:
-                    slot[i][j] = " " """
+        for ei in range(7):
+            for ej in range(9):
+                slot[ei][ej] = slot[ei][ej + 1]
+
+            if NumSlot[ei] <= 0:
+                NumSlot[ei] = 0
+            else:
+                NumSlot[ei] -= 1
+            """ if j == 9:
+                slot[i][j] = " " """
     else:
         """Nothing will happen """
         pass
-
-
-
 
 SlotX = 0
 
@@ -164,7 +175,7 @@ for i in range(8):
     for j in range(10):
         slot[i].append(" ")
 
-
+NumSlot = [0, 0,  0, 0, 0, 0, 0]
 done = False
 
 firstFlag = raw_input("would like to go first (y/n)")
@@ -175,47 +186,45 @@ earthquakeFlag = raw_input("Should I tell you when earthquake happen (y/n)")
 print (earthquakeFlag)
 
 while done is False:
-    SlotX = input("Please enter a slot from 1 to 7 for your move")
-    print SlotX
-    SlotX -= 1
-    if SlotX in range(0, 7):
-
-        if firstFlag != "y":
+    if firstFlag != "y":
+        playSlotX = random.randint(0, 6)
+        playSlotY = NumSlot[playSlotX]
+        slot[playSlotX][playSlotY] = "o"
+        NumSlot[playSlotX] += 1
+        print_slot()
+        SlotX = input("Please enter a slot from 1 to 7 for your move")
+        print SlotX
+        SlotX -= 1
+        if SlotX in range(0, 7):
+            SlotY = NumSlot[SlotX]
+            slot[SlotX][SlotY] = "x"
+            NumSlot[SlotX] += 1
+    else:
+        SlotX = input("Please enter a slot from 1 to 7 for your move")
+        print SlotX
+        SlotX -= 1
+        if SlotX in range(0, 7):
+            SlotY = NumSlot[SlotX]
+            slot[SlotX][SlotY] = "x"
+            NumSlot[SlotX] += 1
             playSlotX = random.randint(0, 6)
             playSlotY = NumSlot[playSlotX]
             slot[playSlotX][playSlotY] = "o"
             NumSlot[playSlotX] += 1
-            SlotY = NumSlot[SlotX]
-            slot[SlotX][SlotY] = "x"
-            NumSlot[SlotX] += 1
-        else:
-            SlotY = NumSlot[SlotX]
-            slot[SlotX][SlotY] = "x"
-            NumSlot[SlotX] += 1
-            playSlotX = random.randint(0, 6)
-            playSlotY = NumSlot[playSlotX]
-            slot[playSlotX][playSlotY] = "o"
-            NumSlot[playSlotX] += 1
+            print_slot()
+    human_done = terminal_test(SlotX, SlotY, "x")
+    ai_done = terminal_test(playSlotX,playSlotY,"o")
 
-
-        for i in range(10):
-            for j in range(7):
-                sys.stdout.write("|")
-                if i <= NumSlot[j]:
-                    sys.stdout.write(slot[j][i])
-                else:
-                    sys.stdout.write(" ")
-
-            sys.stdout.write("|")
-            print " "
-        done = terminal_test(SlotX, SlotY, "x")
-
-        if earthquakeFlag == "y":
-            earthquake()
+    done = human_done or ai_done
+    if earthquakeFlag == "y":
+        earthquake()
+        print_slot()
+    if(human_done is True):
+        print "Human wins!!!"
+    elif(ai_done is True):
+        print "AI wins!!"
+    else:
+        print "Keep Going!"
 
 
 print "Finished"
-
-
-
-
