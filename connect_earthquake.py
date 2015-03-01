@@ -1,12 +1,7 @@
-__author__ = 'kaya'
+__author__ = 'Ota'
 import random
 import sys
-"""
-firstFlag = input("would like to go first (y/n)")
-print (firstFlag)
-earthquakeFlag = input("Should I tell you when earthquake happen (y/n)")
-print (earthquakeFlag)
-"""
+
 slot = []
 
 def check_vertical(x, y, sign):
@@ -151,24 +146,39 @@ for i in range(8):
     for j in range(10):
         slot[i].append(" ")
 
-
 NumSlot = [0, 0,  0, 0, 0, 0, 0]
 done = False
-firstFlag = input("Would like to go first? (y/n) ")
+
+firstFlag = input("would like to go first (y/n)")
+print (firstFlag)
+
+
+earthquakeFlag = input("Should I tell you when earthquake happen (y/n)")
+print (earthquakeFlag)
+
 while done == False:
     SlotX = input("Please enter a slot from 1 to 7 for your move")
     print SlotX
     SlotX -= 1
     if SlotX in range(0, 7):
-        if firstFlag != 'y':
 
-        SlotY = NumSlot[SlotX]
-        slot[SlotX][SlotY] = "x"
-        NumSlot[SlotX] += 1
-        playSlotX = random.randint(0, 6)
-        playSlotY = NumSlot[playSlotX]
-        slot[playSlotX][playSlotY] = "o"
-        NumSlot[playSlotX] += 1
+        if firstFlag != "y":
+            playSlotX = random.randint(0, 6)
+            playSlotY = NumSlot[playSlotX]
+            slot[playSlotX][playSlotY] = "o"
+            NumSlot[playSlotX] += 1
+            SlotY = NumSlot[SlotX]
+            slot[SlotX][SlotY] = "x"
+            NumSlot[SlotX] += 1
+        else:
+            SlotY = NumSlot[SlotX]
+            slot[SlotX][SlotY] = "x"
+            NumSlot[SlotX] += 1
+            playSlotX = random.randint(0, 6)
+            playSlotY = NumSlot[playSlotX]
+            slot[playSlotX][playSlotY] = "o"
+            NumSlot[playSlotX] += 1
+
 
         for i in range(10):
             for j in range(7):
@@ -181,7 +191,10 @@ while done == False:
             sys.stdout.write("|")
             print " "
         done = terminal_test(SlotX, SlotY, "x")
-        '''earthquake()'''
+
+        if earthquakeFlag == "y":
+            '''earthquake()'''
+
 
 print "Finished"
 
