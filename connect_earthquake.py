@@ -139,9 +139,15 @@ def terminal_test(x, y, sign):
 
 def ai_action():
     score_ai=[]
+    score_human = []
+    score_total = []
     max_index = 0
     for ip in range(0, 7):
-        score_ai.append(utility(ip, NumSlot[ip], "o"))
+        ai_result = utility(ip, NumSlot[ip], "o")
+        human_result = utility(ip, NumSlot[ip], "x")
+        score_ai.append(ai_result)
+        score_human.append(human_result)
+        score_total.append(ai_result + human_result)
     max_val = score_ai[0]
     for index in range(0, 7):
         if max_val <= score_ai[index]:
@@ -149,7 +155,9 @@ def ai_action():
             max_index = index
         else:
             pass
-    print "max_index = ", max_index
+    print "max_index = ", max_index + 1
+
+
     return max_index
 
 
