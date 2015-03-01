@@ -3,6 +3,7 @@ import random
 import sys
 
 slot = []
+NumSlot = [0, 0,  0, 0, 0, 0, 0]
 
 def check_vertical(x, y, sign):
     point = []
@@ -133,6 +134,23 @@ def terminal_test(x, y, sign):
     else:
         return False
 
+def earthquake():
+    die = random.randint(0, 3)
+    if die == 1:
+        print ("earthquake happens ")
+        for i in range(7):
+            for j in range(9):
+                slot[i][j] = slot[i][j + 1]
+                if NumSlot[i] <= 0:
+                    NumSlot[i] = 0
+                else:
+                    NumSlot[i] -= 1
+                """ if j == 9:
+                    slot[i][j] = " " """
+    else:
+        """Nothing will happen """
+        pass
+
 
 
 
@@ -146,17 +164,17 @@ for i in range(8):
     for j in range(10):
         slot[i].append(" ")
 
-NumSlot = [0, 0,  0, 0, 0, 0, 0]
+
 done = False
 
-firstFlag = input("would like to go first (y/n)")
+firstFlag = raw_input("would like to go first (y/n)")
 print (firstFlag)
 
 
-earthquakeFlag = input("Should I tell you when earthquake happen (y/n)")
+earthquakeFlag = raw_input("Should I tell you when earthquake happen (y/n)")
 print (earthquakeFlag)
 
-while done == False:
+while done is False:
     SlotX = input("Please enter a slot from 1 to 7 for your move")
     print SlotX
     SlotX -= 1
@@ -193,7 +211,7 @@ while done == False:
         done = terminal_test(SlotX, SlotY, "x")
 
         if earthquakeFlag == "y":
-            '''earthquake()'''
+            earthquake()
 
 
 print "Finished"
