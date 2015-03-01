@@ -75,12 +75,7 @@ def caliculate_point(res):
     '''
     return result_cal
 
-def terminal_test(x, y, sign):
-    res = check_vertical(x, y, sign)
-    a = res[0]*res[1]*res[2]*res[3]
-    print "vertical point = "
-    print a
-
+def utility(x, y, sign):
     if x == 0:
         res = check(0, x, y, sign)
         answer = caliculate_point(res)
@@ -128,10 +123,38 @@ def terminal_test(x, y, sign):
         answer = answer3
 
     print answer
+    return answer
+
+def terminal_test(x, y, sign):
+    res = check_vertical(x, y, sign)
+    a = res[0]*res[1]*res[2]*res[3]
+
+    answer = utility(x, y, sign)
+
     if answer + a >81:
         return True
     else:
         return False
+
+
+def ai_action():
+    score_ai=[]
+    max_index = 0
+    for ip in range(0, 7):
+        score_ai.append(utility(ip, NumSlot[ip], "o"))
+    max_val = score_ai[0]
+    for index in range(0, 7):
+        if max_val <= score_ai[index]:
+            max_val =score_ai[index]
+            max_index = index
+        else:
+            pass
+    print "max_index = ", max_index
+    return max_index
+
+
+
+
 
 
 def print_slot():
@@ -175,7 +198,7 @@ for i in range(8):
     for j in range(10):
         slot[i].append(" ")
 
-NumSlot = [0, 0,  0, 0, 0, 0, 0]
+NumSlot = [0, 0, 0, 0, 0, 0, 0]
 done = False
 
 firstFlag = raw_input("would like to go first (y/n)")
@@ -187,7 +210,10 @@ print (earthquakeFlag)
 
 while done is False:
     if firstFlag != "y":
+        '''
         playSlotX = random.randint(0, 6)
+        '''
+        playSlotX = ai_action()
         playSlotY = NumSlot[playSlotX]
         slot[playSlotX][playSlotY] = "o"
         NumSlot[playSlotX] += 1
@@ -207,7 +233,9 @@ while done is False:
             SlotY = NumSlot[SlotX]
             slot[SlotX][SlotY] = "x"
             NumSlot[SlotX] += 1
-            playSlotX = random.randint(0, 6)
+            '''playSlotX = random.randint(0, 6)
+            '''
+            playSlotX = ai_action()
             playSlotY = NumSlot[playSlotX]
             slot[playSlotX][playSlotY] = "o"
             NumSlot[playSlotX] += 1
@@ -219,9 +247,9 @@ while done is False:
     if earthquakeFlag == "y":
         earthquake()
         print_slot()
-    if(human_done is True):
+    if human_done is True:
         print "Human wins!!!"
-    elif(ai_done is True):
+    elif ai_done is True:
         print "AI wins!!"
     else:
         print "Keep Going!"
