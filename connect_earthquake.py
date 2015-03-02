@@ -1,14 +1,15 @@
-__author__ = 'Ota'
+__author__ = 'Kaya'
 import random
 import sys
 
 slot = []
 
+
 def check_vertical(x, y, sign):
     point = []
     for ind in range(0, 4):
-        if y-ind >= 0:
-            s = slot[x][y-ind]
+        if y - ind >= 0:
+            s = slot[x][y - ind]
             if s == sign:
                 point.append(3)
             elif s == " ":
@@ -20,14 +21,15 @@ def check_vertical(x, y, sign):
         '''point_return *= point[ind]'''
     return point
 
+
 def check(n, x, y, sign):
     point = []
 
     for ind in range(0, 4):
-        sx = x+ind-n
-        sy = y+ind-n
+        sx = x + ind - n
+        sy = y + ind - n
         if sy >= 0:
-            s = slot[x+ind-n][y+ind-n]
+            s = slot[x + ind - n][y + ind - n]
             if s == sign:
                 point.append(3)
             elif s == " ":
@@ -39,8 +41,8 @@ def check(n, x, y, sign):
         '''point_return *= point[ind]'''
 
     for ind in range(0, 4):
-        if y-ind+n >= 0:
-            s = slot[x+ind-n][y-ind+n]
+        if y - ind + n >= 0:
+            s = slot[x + ind - n][y - ind + n]
             if s == sign:
                 point.append(3)
             elif s == " ":
@@ -52,7 +54,7 @@ def check(n, x, y, sign):
         '''point_return *= point[ind]'''
 
     for ind in range(0, 4):
-        s = slot[x+ind-n][y]
+        s = slot[x + ind - n][y]
         if s == sign:
             point.append(3)
         elif s == " ":
@@ -63,10 +65,11 @@ def check(n, x, y, sign):
 
     return point
 
+
 def caliculate_point(res):
-    a = res[0]*res[1]*res[2]*res[3]
-    b = res[4]*res[5]*res[6]*res[7]
-    c = res[8]*res[9]*res[10]*res[11]
+    a = res[0] * res[1] * res[2] * res[3]
+    b = res[4] * res[5] * res[6] * res[7]
+    c = res[8] * res[9] * res[10] * res[11]
     result_cal = a + b + c
     '''result = []
     result.append(a)
@@ -75,7 +78,9 @@ def caliculate_point(res):
     '''
     return result_cal
 
+
 def utility(x, y, sign):
+    global answer
     if x == 0:
         res = check(0, x, y, sign)
         answer = caliculate_point(res)
@@ -84,7 +89,7 @@ def utility(x, y, sign):
         answer1 = caliculate_point(res)
         res = check(1, x, y, sign)
         answer2 = caliculate_point(res)
-        answer = answer1+answer2
+        answer = answer1 + answer2
     elif x == 2:
         res = check(0, x, y, sign)
         answer1 = caliculate_point(res)
@@ -92,7 +97,7 @@ def utility(x, y, sign):
         answer2 = caliculate_point(res)
         res = check(2, x, y, sign)
         answer3 = caliculate_point(res)
-        answer = answer1+answer2 + answer3
+        answer = answer1 + answer2 + answer3
     elif x == 3:
         res = check(0, x, y, sign)
         answer0 = caliculate_point(res)
@@ -102,7 +107,7 @@ def utility(x, y, sign):
         answer2 = caliculate_point(res)
         res = check(3, x, y, sign)
         answer3 = caliculate_point(res)
-        answer = answer0+answer1+answer2+answer3
+        answer = answer0 + answer1 + answer2 + answer3
     elif x == 4:
         res = check(1, x, y, sign)
         answer1 = caliculate_point(res)
@@ -110,13 +115,13 @@ def utility(x, y, sign):
         answer2 = caliculate_point(res)
         res = check(3, x, y, sign)
         answer3 = caliculate_point(res)
-        answer = answer1+answer2+answer3
+        answer = answer1 + answer2 + answer3
     elif x == 5:
         res = check(2, x, y, sign)
         answer2 = caliculate_point(res)
         res = check(3, x, y, sign)
         answer3 = caliculate_point(res)
-        answer = answer2+answer3
+        answer = answer2 + answer3
     elif x == 6:
         res = check(3, x, y, sign)
         answer3 = caliculate_point(res)
@@ -125,20 +130,21 @@ def utility(x, y, sign):
     print answer
     return answer
 
+
 def terminal_test(x, y, sign):
     res = check_vertical(x, y, sign)
-    a = res[0]*res[1]*res[2]*res[3]
+    a = res[0] * res[1] * res[2] * res[3]
 
     answer = utility(x, y, sign)
 
-    if answer + a >81:
+    if answer + a > 81:
         return True
     else:
         return False
 
 
 def ai_action():
-    score_ai=[]
+    score_ai = []
     score_human = []
     score_total = []
     max_index = 0
@@ -151,21 +157,17 @@ def ai_action():
     max_val = score_ai[0]
     for index in range(0, 7):
         if max_val <= score_ai[index]:
-            max_val =score_ai[index]
+            max_val = score_ai[index]
             max_index = index
         else:
             pass
     print "max_index = ", max_index + 1
 
-
     return max_index
 
 
-
-
-
-
 def print_slot():
+    print "|1|2|3|4|5|6|7|"
     for i in range(10):
         for j in range(7):
             sys.stdout.write("|")
@@ -196,8 +198,8 @@ def earthquake():
         """Nothing will happen """
         pass
 
-SlotX = 0
 
+SlotX = 0
 
 for i in range(8):
     slot.append([])
@@ -211,7 +213,6 @@ done = False
 
 firstFlag = raw_input("would like to go first (y/n)")
 print (firstFlag)
-
 
 earthquakeFlag = raw_input("Should I tell you when earthquake happen (y/n)")
 print (earthquakeFlag)
@@ -249,7 +250,7 @@ while done is False:
             NumSlot[playSlotX] += 1
             print_slot()
     human_done = terminal_test(SlotX, SlotY, "x")
-    ai_done = terminal_test(playSlotX,playSlotY,"o")
+    ai_done = terminal_test(playSlotX, playSlotY, "o")
 
     done = human_done or ai_done
     if earthquakeFlag == "y":
@@ -261,6 +262,5 @@ while done is False:
         print "AI wins!!"
     else:
         print "Keep Going!"
-
 
 print "Finished"
