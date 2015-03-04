@@ -197,6 +197,9 @@ def earthquake():
     else:
         """Nothing will happen """
         pass
+def whichWin(human_done, ai_done):
+    """Return true if human wins, otherwise false"""
+    if human_done is True:
 
 
 SlotX = 0
@@ -239,12 +242,22 @@ while done is False:
         print SlotX
         SlotX -= 1
         if SlotX in range(0, 7):
+            #human's tern
             SlotY = NumSlot[SlotX]
             slot[SlotX][SlotY] = "x"
             NumSlot[SlotX] += 1
             '''playSlotX = random.randint(0, 6)
             '''
+            print_slot()
+            human_done1 = terminal_test(SlotX, SlotY, "x")
+            ai_done1 = terminal_test(playSlotX, playSlotY, "o")
+            checkWin1 = human_done or ai_done
+
+            #Ai's tern
+            print "before ai_action"
+            #print_slot()
             playSlotX = ai_action()
+            print "after action"
             playSlotY = NumSlot[playSlotX]
             slot[playSlotX][playSlotY] = "o"
             NumSlot[playSlotX] += 1
