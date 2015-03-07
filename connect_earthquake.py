@@ -3,6 +3,21 @@ import random
 import sys
 
 slot = []
+done = False
+rowCounter = 0
+column_height = [0, 0,
+                 0, 0,
+                 0 ,0,
+                 0]
+
+NumSlot = [0, 
+           0,
+           0, 
+           0,
+           0, 
+           0,
+           0]
+
 
 
 def check_vertical(x, y, sign):
@@ -127,7 +142,7 @@ def utility(x, y, sign):
         answer3 = caliculate_point(res)
         answer = answer3
 
-    print answer
+    print (answer)
     return answer
 
 
@@ -161,13 +176,13 @@ def ai_action():
             max_index = index
         else:
             pass
-    print "max_index = ", max_index + 1
+    print ("max_index = ", max_index + 1)
 
     return max_index
 
-
+'''
 def print_slot():
-    print "|1|2|3|4|5|6|7|"
+    print ("|1|2|3|4|5|6|7|")
     for i in range(10):
         for j in range(7):
             sys.stdout.write("|")
@@ -178,7 +193,31 @@ def print_slot():
 
         sys.stdout.write("|")
         print " "
+'''
+def print_slot():
+    global slot
+    global numSlot
+    global rowCounter
+    list = []
+    
+    for row in range(rowCounter):
+        
+        p ="|"
+        for col in range(7):
+            if slot[row][col] == "x"  or slot[row][col] == "o":
+                p += slot[row][col]
+                p += "|"
+            else:
+                p += " |"
 
+        list.append(p)
+    x = rowCounter
+    
+    while(x > 0):
+        print(list[x - 1])
+        x -= 1
+    print "|1|2|3|4|5|6|7|"
+         
 
 def earthquake():
     die = random.randint(0, 6)
@@ -197,41 +236,100 @@ def earthquake():
     else:
         """Nothing will happen """
         pass
+    
+    
 def whichWin(human_done, ai_done):
     """Return true if human wins, otherwise false"""
     if human_done is True:
+        SlotX = 0
+   
+def promptCheck(UserSelection):
+    
+    if(UserSelection == 'y' or UserSelection == 'n'):
+        return 0
+    else:
+        print "Invalid Selection.\n Please type 'y' for YES or 'n' for NO.\n"
 
 
-SlotX = 0
-
-for i in range(8):
+def addRow():
+    
+    global rowCounter
+    global slot
+    
     slot.append([])
+    i = len(slot)
+    for j in range(7):
+        slot[rowCounter].append(" ")
+       
 
-for i in range(8):
-    for j in range(10):
-        slot[i].append(" ")
+def check_ifRowNeeded():
+    global rowCounter
+    global column_height
+    for ch in column_height:
+        if(ch > rowCounter):
+            addRow()
+            rowCounter += 1
+    
 
-NumSlot = [0, 0, 0, 0, 0, 0, 0]
-done = False
 
-firstFlag = raw_input("would like to go first (y/n)")
-print (firstFlag)
+def col_height(addToColumn):
+    global column_height
+    column_height[addToColumn - 1] += 1
+    #print "this is Column_height: ", column_height
 
-earthquakeFlag = raw_input("Should I tell you when earthquake happen (y/n)")
-print (earthquakeFlag)
+# Temporary Build of Board
+def build():
+    global slot
+    global rowCounter
+    rowCounter = 10
+    
+    for i in range(rowCounter):
+        slot.append([])
+        for j in range(7):
+            slot[i].append(" ")            
+            
+         
+###############Main#############
+
+
+
+
+
+
+# Prompts Users If he/she goes first
+while(True):
+    firstFlag = raw_input("Would like to go first? [y/n]: ")
+    #print (firstFlag)
+    if(promptCheck(firstFlag) == 0):
+        break
+
+# Prompts User to inform about earthquake after every turn
+while(True):    
+    earthquakeFlag = raw_input("Should I tell you when earthquake happen? [y/n]: ")
+    #print (earthquakeFlag)
+    if(promptCheck(earthquakeFlag) == 0):
+        break
+    
+
+
+
+
 
 while done is False:
     if firstFlag != "y":
-        '''
-        playSlotX = random.randint(0, 6)
-        '''
+        
+    #playSlotX = random.randint(0, 6)
         playSlotX = ai_action()
+        col_height(playSlotX + 1)
+        check_ifRowNeeded()
         playSlotY = NumSlot[playSlotX]
         slot[playSlotX][playSlotY] = "o"
         NumSlot[playSlotX] += 1
         print_slot()
         SlotX = input("Please enter a slot from 1 to 7 for your move")
-        print SlotX
+        print (SlotX)
+        col_height(SlotX)
+        check_ifRowNeeded()
         SlotX -= 1
         if SlotX in range(0, 7):
             SlotY = NumSlot[SlotX]
@@ -240,23 +338,31 @@ while done is False:
     else:
         SlotX = input("Please enter a slot from 1 to 7 for your move")
         print SlotX
+        col_height(SlotX)
+        check_ifRowNeeded()
+        print(slot)
+        print(column_height)
+        print(rowCounter)
+        
         SlotX -= 1
-        if SlotX in range(0, 7):
+        if SlotX in range(0, 6):
             #human's tern
             SlotY = NumSlot[SlotX]
             slot[SlotX][SlotY] = "x"
             NumSlot[SlotX] += 1
-            '''playSlotX = random.randint(0, 6)
-            '''
+          
+        #playSlotX = random.randint(0, 6)
             print_slot()
-            human_done1 = terminal_test(SlotX, SlotY, "x")
-            ai_done1 = terminal_test(playSlotX, playSlotY, "o")
-            checkWin1 = human_done or ai_done
-
+            human_done1 = terminal_test(SlotY, SlotX, "x")
+ 
+            #checkWin1 = human_done or ai_done
+ 
             #Ai's tern
             print "before ai_action"
-            #print_slot()
+            print_slot()
             playSlotX = ai_action()
+            col_height(playSlotX + 1)
+            check_ifRowNeeded()
             print "after action"
             playSlotY = NumSlot[playSlotX]
             slot[playSlotX][playSlotY] = "o"
@@ -264,7 +370,7 @@ while done is False:
             print_slot()
     human_done = terminal_test(SlotX, SlotY, "x")
     ai_done = terminal_test(playSlotX, playSlotY, "o")
-
+ 
     done = human_done or ai_done
     if earthquakeFlag == "y":
         earthquake()
@@ -277,3 +383,4 @@ while done is False:
         print "Keep Going!"
 
 print "Finished"
+
